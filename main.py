@@ -22,7 +22,7 @@ from io import StringIO as std_str_io
 from settings import MainSettings
 
 
-__version__ = 1.057
+__version__ = 1.058
 
 # ------------------------------------------------------------------------------
 # ESP_Files_ContextMenu
@@ -67,7 +67,7 @@ class MainWindow(QMainWindow):
 
         # --- load main ui window
         self.uic = uic.loadUi('main.ui', self)
-
+        self.setWindowTitle(self.windowTitle() + ' v%0.3f' % __version__)
         self.settings = MainSettings()
 
         # --- create qsci lua/python editor widgets

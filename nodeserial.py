@@ -7,6 +7,19 @@ from queue import Queue
 from time import time, sleep
 
 
+QIODevice_names = {
+        'QIODevice::NotOpen':   QIODevice.NotOpen,      # The device is not open.
+        'QIODevice::ReadOnly':  QIODevice.ReadOnly,     # The device is open for reading.
+        'QIODevice::WriteOnly': QIODevice.WriteOnly,    # The device is open for writing. Note that this mode implies Truncate.
+        'QIODevice::ReadWrite': QIODevice.ReadWrite,    # The device is open for reading and writing.
+        'QIODevice::Append':    QIODevice.Append,       # The device is opened in append mode so that all data is written to the end of the file.
+        'QIODevice::Truncate':  QIODevice.Truncate,     # If possible, the device is truncated before it is opened. All earlier contents of the device are lost.
+        'QIODevice::Text':      QIODevice.Text,         # When reading, the end-of-line terminators are translated to '\n'.
+                                                        # When writing, the end-of-line terminators are translated to the local encoding,
+                                                        # for example '\r\n' for Win32.
+        'QIODevice::Unbuffered': QIODevice.Unbuffered   # Any buffer in the device is bypassed.
+    }
+
 def serial_log(type, lvl='inf'):
     """ logging decorator maker """
     def logdec(func):
@@ -14,6 +27,7 @@ def serial_log(type, lvl='inf'):
             res = func(self, *argv, **kwargv)
 
             if self.log:
+
                 if res == -1 or res == False:
                     l = 'err'
                 else:
@@ -27,7 +41,7 @@ def serial_log(type, lvl='inf'):
                 else:
                     pref = '%s' % type
 
-                msg = '%s %s' % (pref, argv[0])
+                msg = '%s %s' % (pref, ' '.join([str(a) for a in argv]))
                 self.log(msg.replace('\r\n', ''), l)
 
             return res
@@ -99,20 +113,20 @@ class NodeSerial(QSerialPort):
             self.setPortName(name)
         # try open
         if not self.isOpen():
-            return self.open(QIODevice.ReadWrite, name)
+            return self.open('QIODevice::ReadWrite', name)
         return True
 
     def close_port(self):
         if self.isOpen():
-            self.close()
+            self.close(self.portName())
         return True
 
     @serial_log('OPEN', lvl='ginf')
     def open(self, dev, name):
-        return super().open(dev)
+        return super().open(QIODevice_names[dev])
 
     @serial_log('CLOSE', lvl='ginf')
-    def close(self):
+    def close(self, port):
         super().close()
 
     @serial_log('wr')

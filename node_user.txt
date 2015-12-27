@@ -1,1 +1,4 @@
-dofile("AutoConnect.lua")
+dofile("AutoConnect.lua")
+dofile("googleTime.lua")
+uart.setup(0,115200,8,0,1,0)
+dofile("init.lua")

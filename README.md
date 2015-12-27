@@ -4,7 +4,7 @@ Fast and easy upload/download/run lua scripts to ESP8266. Debug extremely useful
 Based on PyQt5 and QScinltilla python bindings(for code editors).
 
 ![screen](http://hobby-research.at.ua/esp8266/commander/26-12-2015_10-52-16.png)
-
+![screen](http://hobby-research.at.ua/esp8266/commander/27-12-2015_11-12-18.png)
 
 ## Install / Run
 
